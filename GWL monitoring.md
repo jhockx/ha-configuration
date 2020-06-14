@@ -364,3 +364,5 @@ rest_command:
     payload: '{"date": "{{ now().date() }}", "reading": "{{ states.sensor.p1_gas_usage.state }}"}'
     verify_ssl: true
 ```
+
+Setup an automation to call this REST command at the end of the day around midnight. To reduce the load on the website, I have set the time to make the API call to 23.52. Just in case mindergas.nl gets a lot of API calls exactly at midnight (00.00), you can also pick some time around midnight.

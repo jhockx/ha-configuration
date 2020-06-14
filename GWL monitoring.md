@@ -55,6 +55,7 @@ sensor:
     state_topic: "sensors/power/p1meter/actual_consumption"
     value_template: "{{ value|int }}"
     icon: mdi:flash
+    expire_after: 30
     
   - platform: mqtt
     name: P1 Actual Power Delivered
@@ -62,6 +63,7 @@ sensor:
     state_topic: "sensors/power/p1meter/actual_received"
     value_template: "{{ value|int }}"
     icon: mdi:flash
+    expire_after: 30
 
   - platform: mqtt
     name: P1 Instant Power Usage
@@ -69,7 +71,7 @@ sensor:
     state_topic: "sensors/power/p1meter/instant_power_usage_l1"
     value_template: "{{ value|int }}"
     icon: mdi:flash
-    expire_after: 10
+    expire_after: 30
 
   - platform: mqtt
     name: P1 Instant Power Current
@@ -204,7 +206,9 @@ utility_meter:
 ## Combining sensors
 Now we can start combining and fixing some sensors. I wanted to:
 - Fix the solar panel realtime readout: The SMA device stops sending out values during the night, which means `sensor.pv_power` will be "unknown" during this time, while it obviously is just zero.
+- Fix some MQTT sensors that don't send zero values. By setting the `expire_after`, the sensor becomes "unknown" after some amount of time. For some sensors we know that "unknown" is actually zero.
 - Display the current tarif from the P1 meter with words, not integer coded.
+- See the total direct power usage
 - See the total solar power delivered to the P1 meter (low + high tarif)
 - See the total electricity consumption from the P1 meter (low + high tarif)
 - See the total electricity consumption (low + high tarif + direct solar energy usage)
@@ -215,11 +219,31 @@ I have built these custom sensors using the [Template](https://www.home-assistan
 sensor:
   - platform: template
     sensors:
-        # Solar energy
+        # Solar sensors fixes
         pv_power_incl_0:
-            friendly_name: 'Vermogen'
+            friendly_name: 'Vermogen zonnepanelen'
             value_template: "{{ states.sensor.pv_power.state | replace('unknown','0') }}"
             icon_template: mdi:solar-power
+            unit_of_measurement: W
+        
+        # P1 sensors fixes
+        p1_instant_power_usage_incl_0:
+            friendly_name: 'Vermogen levering'
+            value_template: "{{ states.sensor.p1_instant_power_usage.state | replace('unknown','0') }}"
+            icon_template: mdi:flash
+            unit_of_measurement: W
+        
+        p1_actual_power_delivered_incl_0:
+            friendly_name: 'Vermogen teruglevering'
+            value_template: "{{ states.sensor.p1_actual_power_delivered.state | replace('unknown','0') }}"
+            icon_template: mdi:flash
+            unit_of_measurement: W
+        
+        # Total direct power usage P1 + direct power usage from solar
+        power_usage_total:
+            friendly_name: 'Vermogen verbruik'
+            value_template: "{{ [states.sensor.pv_power_incl_0.state|int - states.sensor.p1_actual_power_delivered_incl_0.state|int + states.sensor.p1_instant_power_usage_incl_0.state|int, 0]|max }}"
+            icon_template: mdi:flash
             unit_of_measurement: W
         
         # P1 sensors

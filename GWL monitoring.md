@@ -17,7 +17,7 @@ sensor:
 ```
 
 ## Electricity/gas usage from the DSMR5.0
-Home Assistant is setup as a MQTT broker. Hooked up to the DSMR5.0 is an esp8266 as a MQTT sensor. The esp8266 reads out the P1 port and sends this to the MQTT broker. To setup the esp8266, checkout my [other repository](https://github.com/jhockx/esp8266_p1meter). To subscripe to the MQTT topics from the esp8266 and add them as sensors in your Home Assistant, add the following to `configuration.yaml`:
+Home Assistant is setup as a MQTT broker by just installing the [Mosquitto MQTT broker addon](https://github.com/home-assistant/hassio-addons/blob/master/mosquitto/README.md). Hooked up to the DSMR5.0 is an esp8266 as a MQTT sensor. The esp8266 reads out the P1 port and sends this to the MQTT broker. To setup the esp8266, checkout my [other repository](https://github.com/jhockx/esp8266_p1meter). To subscripe to the MQTT topics from the esp8266 and add them as sensors in your Home Assistant, add the following to `configuration.yaml`:
 
 ```
 sensor:

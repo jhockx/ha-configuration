@@ -50,7 +50,7 @@ influxdb:
 
 Create the user `homeassistant` in InfluxDB with password `YOUR_PASSWORD`. Now create the database by executing the following query:
 ```
-CREATE DATABASE "homeassistant" WITH DURATION 1d SHARD DURATION 1d NAME "autogen"
+CREATE DATABASE "homeassistant" WITH DURATION 3d SHARD DURATION 1d NAME "autogen"
 ```
 
 Add the following Continuous Queries for long term storage:

@@ -1,5 +1,8 @@
 # Gas Water Light (GWL) monitoring
-My Home Assistant is configured to get information about electricity usage, gas usage and solar panels. I will explain my setup to read out my Dutch Smart Meter (DSMR5.0), solar panels (SMA) and how to combine these two to give proper insights in your electricity consumption an delivery. With this setup, I'm also sending my gas usage to [mindergas.nl](https://mindergas.nl/) via a REST API call.
+My Home Assistant is configured to get information about electricity usage, gas usage and solar panels. I will explain my setup to read out my Dutch Smart Meter (DSMR5.0), solar panels (SMA) and how to combine these two to give proper insights in your electricity consumption an delivery. With this setup, I'm also sending my gas usage to [mindergas.nl](https://mindergas.nl/) via a REST API call. After collecting all the data, it can be nicely visualized in the Lovelace UI (see next section).
+
+## Energy plots
+To nicely plot all the data collected through the methods below, you can use [my addon](https://github.com/jhockx/ha-energy-plots).
 
 ## Solar panels
 My solar panels use a SMA inverter. You can easily readout the SMA inverter by using the [SMA Solar integration](https://www.home-assistant.io/integrations/sma/). Add this to `configuration.yaml`:
